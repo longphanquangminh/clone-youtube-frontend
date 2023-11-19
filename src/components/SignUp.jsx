@@ -44,12 +44,13 @@ const SignUp = () => {
                 let full_name = document.querySelector("#fullName").value;
                 let email = document.querySelector("#email").value;
                 let pass_word = document.querySelector("#pass").value;
+                console.log({ full_name, email, pass_word });
                 signUpAPI({ full_name, email, pass_word })
                   .then(result => {
                     alert(result.message);
                   })
                   .catch(error => {
-                    alert(error.message);
+                    alert(error.response.data.message);
                   });
               }}
             >
