@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Box, CardMedia } from "@mui/material";
 
 import { Videos, ChannelCard } from ".";
-import { loginAPI, loginFacebookAPI, signUpAPI } from "../utils/fetchFromAPI";
+import { loginAPI, loginFacebookAPI } from "../utils/fetchFromAPI";
 import ReactFacebookLogin from "react-facebook-login";
 
 const Login = () => {
@@ -11,9 +11,7 @@ const Login = () => {
   const [videos, setVideos] = useState(null);
 
   const { id } = useParams();
-
   useEffect(() => {}, []);
-
   return (
     <div className='p-5 ' style={{ minHeight: "100vh" }}>
       <div className=' d-flex justify-content-center'>
@@ -38,6 +36,7 @@ const Login = () => {
               onClick={() => {
                 let email = document.querySelector("#email").value;
                 let pass_word = document.querySelector("#pass").value;
+
                 loginAPI({ email, pass_word })
                   .then(result => {
                     alert(result.message);
@@ -51,26 +50,26 @@ const Login = () => {
               Login
             </button>
           </div>
+
+          <ReactFacebookLogin
+            appId='358761373294052'
+            callback={response => {
+              console.log(response);
+
+              let model = {
+                faceAppId: response.id,
+                full_name: response.name,
+              };
+              loginFacebookAPI(model)
+                .then(result => {
+                  alert(result.message);
+                  // lưu token
+                })
+                .catch();
+            }}
+          />
         </form>
       </div>
-      <ReactFacebookLogin
-        appId='358761373294052'
-        callback={response => {
-          console.log(response);
-          let model = {
-            faceAppId: response.id,
-            full_name: response.name,
-          };
-          loginFacebookAPI(model)
-            .then(result => {
-              alert(result.message);
-              // lưu token
-            })
-            .catch(error => {
-              alert(error.response.data.message);
-            });
-        }}
-      />
     </div>
   );
 };
