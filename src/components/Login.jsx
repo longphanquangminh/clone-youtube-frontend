@@ -52,7 +52,7 @@ const Login = () => {
           </div>
 
           <ReactFacebookLogin
-            appId='358761373294052'
+            appId='735686021258135'
             callback={response => {
               console.log(response);
 
