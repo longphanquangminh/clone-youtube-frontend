@@ -14,28 +14,11 @@ const Feed = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (params.id) {
-      getVideoByTypeAPI(params.id)
-        .then(result => {
-          setVideos(result);
-        })
-        .catch(error => {});
-    } else {
-      // getVideoAPI().then(result => {
-
-      //   setVideos(result)
-
-      // }).catch(error => {
-
-      // });
-      getVideoPageAPI(1)
-        .then(result => {
-          // { data, totalPage}
-          setVideos(result.data);
-          setTotalPage(result.totalPage);
-        })
-        .catch();
-    }
+    getVideoByTypeAPI(params.id)
+      .then(result => {
+        setVideos(result);
+      })
+      .catch(error => {});
   }, [params.id]);
 
   useEffect(() => {
@@ -45,7 +28,7 @@ const Feed = () => {
         setVideos(result.data);
         setTotalPage(result.totalPage);
       })
-      .catch();
+      .catch(error => {});
   }, [params.page]);
 
   let listPage = [];

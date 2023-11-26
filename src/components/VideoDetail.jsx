@@ -5,12 +5,13 @@ import { Typography, Box, Stack } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { Videos, Loader } from "./";
-import { getCommentVideoId, getVideoAPI, getVideoId } from "../utils/fetchFromAPI";
+import { commentAPI, getCommentVideoId, getVideoAPI, getVideoId } from "../utils/fetchFromAPI";
 
 const VideoDetail = () => {
   const [videoDetail, setVideoDetail] = useState(null);
   const [videos, setVideos] = useState(null);
   const [comments, setComments] = useState([]);
+
   const { id } = useParams();
 
   useEffect(() => {
@@ -18,26 +19,22 @@ const VideoDetail = () => {
       .then(result => {
         setVideoDetail(result);
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch();
 
     getVideoAPI()
       .then(result => {
         setVideos(result);
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch();
 
     getCommentVideoId(id)
       .then(result => {
         setComments(result);
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch();
   }, [id]);
+
+  console.log(comments);
 
   // if(!videoDetail) return <Loader />;
 
@@ -98,6 +95,7 @@ const VideoDetail = () => {
                           height={40}
                         />
                         <div className='form-outline w-100'>
+                          {/* text area comment */}
                           <textarea
                             className='form-control text-white'
                             id='textAreaExample'
@@ -105,15 +103,37 @@ const VideoDetail = () => {
                             style={{ background: "#000" }}
                             defaultValue={""}
                           />
+
                           <label className='form-label text-danger' htmlFor='textAreaExample'>
                             Validate
                           </label>
                         </div>
                       </div>
                       <div className='float-end mt-2 pt-1'>
-                        <button type='button' className='btn btn-outline-light btn-sm me-3'>
+                        {/* nút comment */}
+                        <button
+                          type='button'
+                          className='btn btn-outline-light btn-sm me-3'
+                          onClick={() => {
+                            let model = {
+                              video_id: id,
+                              content: document.querySelector("#textAreaExample").value,
+                            };
+                            commentAPI(model)
+                              .then(result => {
+                                // gọi lại API lấy danh bình luận
+                                getCommentVideoId(id)
+                                  .then(result => {
+                                    setComments(result);
+                                  })
+                                  .catch();
+                              })
+                              .catch(err => {});
+                          }}
+                        >
                           Post comment
                         </button>
+
                         <button type='button' className='btn btn-outline-secondary btn-sm'>
                           Cancel
                         </button>
@@ -121,26 +141,30 @@ const VideoDetail = () => {
                     </div>
 
                     <div className='card-body text-white' style={{ backgroundColor: "#000" }}>
-                      {comments.map(item => (
-                        <div className='d-flex flex-start '>
-                          <img className='rounded-circle shadow-1-strong me-3' src={item.user.avatar} alt='avatar' width={60} height={60} />
+                      {comments.map(item => {
+                        return (
+                          <div className='d-flex flex-start '>
+                            <img className='rounded-circle shadow-1-strong me-3' src={item.user.avatar} alt='avatar' width={60} height={60} />
 
-                          <p className='mb-4 pb-2'>
-                            <h6 className='fw-bold text-white mb-1'>{item.user.full_name}</h6>
-                            {item.content}
-                            <div className=' d-flex justify-content-start '>
-                              <a href='#!' className='d-flex align-items-center me-3 text-white'>
-                                <i className='far fa-thumbs-up me-2' />
-                                <p className='mb-0'>Like</p>
-                              </a>
-                              <a href='#!' className='d-flex align-items-center me-3 text-white'>
-                                <i className='far fa-comment-dots me-2' />
-                                <p className='mb-0'>Reply</p>
-                              </a>
-                            </div>
-                          </p>
-                        </div>
-                      ))}
+                            <p className='mb-4 pb-2'>
+                              <h6 className='fw-bold text-white mb-1'>{item.user.full_name}</h6>
+
+                              {item.content}
+
+                              <div className=' d-flex justify-content-start '>
+                                <a href='#!' className='d-flex align-items-center me-3 text-white'>
+                                  <i className='far fa-thumbs-up me-2' />
+                                  <p className='mb-0'>Like</p>
+                                </a>
+                                <a href='#!' className='d-flex align-items-center me-3 text-white'>
+                                  <i className='far fa-comment-dots me-2' />
+                                  <p className='mb-0'>Reply</p>
+                                </a>
+                              </div>
+                            </p>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>

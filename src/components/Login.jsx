@@ -41,6 +41,10 @@ const Login = () => {
                   .then(result => {
                     alert(result.message);
                     // lưu token
+                    console.log(result);
+                    localStorage.setItem("LOGIN_USER", result.content);
+
+                    window.location.reload();
                   })
                   .catch(error => {
                     alert(error.response.data.message);
@@ -52,7 +56,7 @@ const Login = () => {
           </div>
 
           <ReactFacebookLogin
-            appId='735686021258135'
+            appId='288367873590008'
             callback={response => {
               console.log(response);
 
