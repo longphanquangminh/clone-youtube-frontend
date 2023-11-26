@@ -19,6 +19,7 @@ export const fetchFromAPI = async url => {
   return data;
 };
 
+// khóa token => 401: token expired => API reset token => localstore: token => reload()
 export const getVideoAPI = async () => {
   const { data } = await axios.get(`${BASE_URL}/video/get-video`, options);
 
@@ -35,12 +36,14 @@ export const getVideoByTypeAPI = async typeId => {
   return data.content;
 };
 
+// khóa token => 401: token expired => API reset token => localstore: token => reload()
 export const getVideoPageAPI = async (page = 1) => {
   const { data } = await axios.get(`${BASE_URL}/video/get-video-page/${page}`, options);
 
   return data.content; // { data, totalPage}
 };
 
+// khóa token => 401: token expired => API reset token => localstore: token => reload()
 export const getVideoId = async videoId => {
   const { data } = await axios.get(`${BASE_URL}/video/get-video-id/${videoId}`, options);
 
@@ -76,3 +79,40 @@ export const commentAPI = async model => {
 
   return data;
 };
+
+export const getInfo = async () => {
+  const { data } = await axios.get(`${BASE_URL}/user/get-info`, options);
+  return data.content;
+};
+
+export const updateInfo = async (userId, model) => {
+  const { data } = await axios.put(`${BASE_URL}/user/post-info/${userId}`, model, options);
+  return data.message;
+};
+
+// interceptor => middleware khi nhận response từ BE về
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    // if (error.response.status === 401) {
+    //   // call API
+    // }
+    console.log(error.response.data);
+    if (error.response.data === "TokenExpiredError") {
+      // call API refresh
+      axios
+        .post(`${BASE_URL}/auth/token-ref`, "", options)
+        .then(result => {
+          localStorage.setItem("LOGIN_USER", result.data.content);
+          console.log(result.data.content);
+          window.location.reload();
+        })
+        .catch(error => {
+          // logout => API Logout
+
+          // xóa localstore
+          localStorage.removeItem("LOGIN_USER");
+        });
+    }
+  },
+);
