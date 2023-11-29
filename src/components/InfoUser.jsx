@@ -6,7 +6,7 @@ import { Videos, ChannelCard } from ".";
 
 import ReactPlayer from "react-player";
 import { DOMAIN_BE_IMG } from "../utils/constants";
-import { getInfo, updateInfo } from "../utils/fetchFromAPI";
+import { BASE_URL_IMG, getInfo, updateInfo, uploadAvatar } from "../utils/fetchFromAPI";
 
 const InfoUser = () => {
   const [channelDetail, setChannelDetail] = useState();
@@ -67,7 +67,31 @@ const InfoUser = () => {
             <div className='col-2'>
               <img className='rounded-circle' src={avatar} width='100%' />
 
-              <input className='form-control' type='file' id='formFile' />
+              <input
+                className='form-control'
+                type='file'
+                id='formFile'
+                onChange={event => {
+                  let file = event.target.files[0];
+                  let fileC2 = document.querySelector("#formFile").files[0];
+
+                  // let formDataJson = {
+                  //   avatar: file,
+                  //   hoTen: "",
+                  //   email: "",
+                  // };
+
+                  let formData = new FormData();
+                  formData.append("avatar", file);
+
+                  // formData.append("hoTen", "abc");
+                  // formData.append("email", "abc@gmail.com");
+
+                  uploadAvatar(formData).then(result => {
+                    setAvatar(BASE_URL_IMG + result);
+                  });
+                }}
+              />
             </div>
             <div className=' col-10'>
               <form className='row g-3 text-white'>

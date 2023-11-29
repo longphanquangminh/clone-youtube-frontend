@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const BASE_URL = "http://localhost:8080";
+export const BASE_URL_IMG = "http://localhost:8080/public/imgs/";
 
 const options = {
   params: {
@@ -10,6 +11,7 @@ const options = {
     "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY,
     "X-RapidAPI-Host": "youtube-v31.p.rapidapi.com",
     token: localStorage.getItem("LOGIN_USER"),
+    // 'content-type': 'multipart/form-data'
   },
 };
 
@@ -116,3 +118,8 @@ axios.interceptors.response.use(
     }
   },
 );
+
+export const uploadAvatar = async formData => {
+  const { data } = await axios.post(`${BASE_URL}/user/upload-avatar`, formData, options);
+  return data;
+};
