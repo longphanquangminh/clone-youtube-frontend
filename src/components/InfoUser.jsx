@@ -83,12 +83,14 @@ const InfoUser = () => {
 
                   let formData = new FormData();
                   formData.append("avatar", file);
+                  formData.append("upload_preset", "gb9s5ykb");
 
                   // formData.append("hoTen", "abc");
                   // formData.append("email", "abc@gmail.com");
 
                   uploadAvatar(formData).then(result => {
-                    setAvatar(BASE_URL_IMG + result);
+                    // setAvatar(BASE_URL_IMG + result);
+                    console.log(result);
                   });
                 }}
               />
