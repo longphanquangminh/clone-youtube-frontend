@@ -110,7 +110,7 @@ axios.interceptors.response.use(
   response => response,
   error => {
     console.log(error.response.data);
-    if (error.response.data == "TokenExpiredError") {
+    if (error.response.data === "TokenExpiredError") {
       // call API refresh
       axios
         .post(`${BASE_URL}/auth/token-ref`, "", options)
