@@ -13,27 +13,31 @@ const Feed = () => {
   const params = useParams();
   const navigate = useNavigate();
 
+
   useEffect(() => {
-    getVideoByTypeAPI(params.id)
-      .then(result => {
-        setVideos(result);
-      })
-      .catch(error => {});
+
+
+    getVideoByTypeAPI(params.id).then(result => {
+
+      setVideos(result)
+
+    }).catch(error => { });
+
   }, [params.id]);
 
   useEffect(() => {
-    getVideoPageAPI(params.page)
-      .then(result => {
-        // { data, totalPage}
-        setVideos(result.data);
-        setTotalPage(result.totalPage);
-      })
-      .catch(error => {});
-  }, [params.page]);
+    getVideoPageAPI(params.page).then(result => {
+      // { data, totalPage}
+      setVideos(result.data);
+      setTotalPage(result.totalPage);
+    }).catch(error => { });
+  }, [params.page])
+
 
   let listPage = [];
   for (let index = 1; index <= totalPage; index++) {
     listPage.push(index);
+
   }
 
   return (
@@ -41,28 +45,28 @@ const Feed = () => {
       <Box sx={{ height: { sx: "auto", md: "92vh" }, borderRight: "1px solid #3d3d3d", px: { sx: 0, md: 2 } }}>
         <Sidebar selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
 
-        <Typography className='copyright' variant='body2' sx={{ mt: 1.5, color: "#fff" }}>
+        <Typography className="copyright" variant="body2" sx={{ mt: 1.5, color: "#fff", }}>
           Copyright © 2050 Media
         </Typography>
       </Box>
 
       <Box p={2} sx={{ overflowY: "auto", height: "90vh", flex: 2 }}>
-        <Typography variant='h4' fontWeight='bold' mb={2} sx={{ color: "white" }}>
+        <Typography variant="h4" fontWeight="bold" mb={2} sx={{ color: "white" }}>
           {selectedCategory} <span style={{ color: "#FC1503" }}>videos</span>
         </Typography>
 
         <Videos videos={videos} />
 
-        {listPage.map(page => (
-          <button
-            onClick={() => {
-              navigate(`/${page}`);
-            }}
-            className='btn btn-sm btn-primary mx-2'
-          >
-            {page}
-          </button>
-        ))}
+        {
+          listPage.map(page =>
+            <button
+              onClick={() => {
+                navigate(`/${page}`);
+              }}
+              className="btn btn-sm btn-primary mx-2">{page}</button>
+          )
+        }
+
       </Box>
     </Stack>
   );
