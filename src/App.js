@@ -1,21 +1,22 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Box } from '@mui/material';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import { Box } from "@mui/material";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import { ChannelDetail, VideoDetail, SearchFeed, Navbar, Feed } from './components';
+import { ChannelDetail, VideoDetail, SearchFeed, Navbar, Feed } from "./components";
 import InfoUser from "./components/InfoUser";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Footer from "./components/Footer";
+import Socket from "./components/Socket";
 
 const App = () => (
   <BrowserRouter>
-    <Box sx={{ backgroundColor: '#000' }}>
+    <Box sx={{ backgroundColor: "#000" }}>
       <Navbar />
       <Routes>
         <Route exact path='/' element={<Feed />} />
         <Route exact path='/:page' element={<Feed />} />
-        
+
         <Route exact path='/videoType/:id' element={<Feed />} />
 
         <Route path='/video/:id' element={<VideoDetail />} />
@@ -24,6 +25,7 @@ const App = () => (
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
         <Route path='/search/:searchTerm' element={<SearchFeed />} />
+        <Route path='/socket' element={<Socket />} />
       </Routes>
       <Footer />
     </Box>
